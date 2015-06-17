@@ -43,6 +43,8 @@ public class Controle extends HttpServlet {
 			gravar(request, response);
 		}else if(cmd.equalsIgnoreCase("consultar")){
 			consultar(request, response);
+		}else if(cmd.equalsIgnoreCase("excluir")){
+			excluir(request, response);
 		}
 	}
 	
@@ -74,5 +76,34 @@ public class Controle extends HttpServlet {
 			// TODO: handle exception
 		}
 	}
+	protected void excluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		try {
+				String cod[]={};
+				
+				
+				if(request.getParameterValues("codigo")!=null){
+					for (int i = 0; i < cod.length; i++) {
+						cod = request.getParameterValues("codigo");
+						int codigo = Integer.parseInt(cod[i]);
+						new ProdutoDao().delete(codigo);;
+						
+					}
+					request.setAttribute("msg","Codigo Excluido");
+					request.getRequestDispatcher("consultar.jsp").forward(request, response);
+					
+				}else {
+					request.setAttribute("msg","nenhum codigo digitado.");
+					request.getRequestDispatcher("consultar.jsp").forward(request, response);
+				}
+			
+			} catch (Exception e) {
+				request.setAttribute("msg", "ERRO:"+e.getMessage());
+				request.getRequestDispatcher("erro.jsp").forward(request, response);
+				// TODO: handle exception
+			}
+	
+	}
+
 
 }
